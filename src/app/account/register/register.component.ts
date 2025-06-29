@@ -20,14 +20,16 @@ export class RegisterComponent implements OnInit {
     this.createRegisterForm();
   }
 
-  createRegisterForm() { // Add User Name 
+  createRegisterForm() {
     this.registerForm = this.fb.group({
       displayName: [null, [Validators.required]],
-      email: [null, 
+      userName: [null, [Validators.required]], // Add username field
+      email: [null,
         [Validators.required, Validators
         .pattern('^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$')],
         [this.validateEmailNotTaken()]
       ],
+      phone: [null, [Validators.required, Validators.pattern('^[0-9]{10,15}$')]], // Add phone validation
       password: [null, Validators.required]
     });
   }
