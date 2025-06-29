@@ -12,7 +12,21 @@
     <button class="btn btn-primary" (click)="createPaymentIntent()">
         Go to Payment <i class="fa fa-angle-right"></i>
     </button>
-    <button class="btn btn-primary" (click)="createPaymentIntent()">
+    <button class="btn btn-primary" (click)="payWithJustPay(justPayModal)">
       Pay with JustPay <i class="fa fa-angle-right"></i>
     </button>
 </div>
+
+<!-- JustPay Modal -->
+<ng-template #justPayModal let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title">JustPay Payment</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body text-center">
+    <p>Please pay this billing with JustPay</p>
+    <p class="text-warning">Time remaining: {{Math.floor(timeLeft/60)}}:{{(timeLeft%60).toString().padStart(2, '0')}}</p>
+  </div>
+</ng-template>
