@@ -23,18 +23,19 @@ export class RegisterComponent implements OnInit {
   createRegisterForm() {
     this.registerForm = this.fb.group({
       displayName: [null, [Validators.required]],
-      userName: [null, [Validators.required]], // Add username field
+      userName: [null, [Validators.required]],
       email: [null,
         [Validators.required, Validators
         .pattern('^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$')],
         [this.validateEmailNotTaken()]
       ],
-      phone: [null, [Validators.required, Validators.pattern('^[0-9]{10,15}$')]], // Add phone validation
+      phoneNumber: [null, [Validators.required, Validators.pattern('^[0-9]{10,15}$')]], // Changed from 'phone' to 'phoneNumber'
       password: [null, Validators.required]
     });
   }
 
   onSubmit() {
+    console.log('Form values:', this.registerForm.value); // Add logging to verify form values
     this.accountService.register(this.registerForm.value).subscribe(response => {
       this.router.navigateByUrl('/shop');
     }, error => {

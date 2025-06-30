@@ -27,6 +27,23 @@
   </div>
   <div class="modal-body text-center">
     <p>Please pay this billing with JustPay</p>
+
+    <div class="reference-number-container my-4">
+      <h5>Reference Number:</h5>
+      <div class="input-group">
+        <input type="text" class="form-control" [value]="referenceNumber" readonly>
+        <div class="input-group-append">
+          <button class="btn btn-outline-secondary" type="button" (click)="copyReferenceNumber()">
+            <i class="fa" [ngClass]="copied ? 'fa-check' : 'fa-copy'"></i>
+          </button>
+        </div>
+      </div>
+      <small class="text-muted">Use this reference number when making your payment</small>
+    </div>
+
     <p class="text-warning">Time remaining: {{Math.floor(timeLeft/60)}}:{{(timeLeft%60).toString().padStart(2, '0')}}</p>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary" (click)="modal.close()">Close</button>
   </div>
 </ng-template>

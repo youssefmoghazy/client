@@ -76,14 +76,13 @@ export class CheckoutPaymentComponent implements AfterViewInit, OnDestroy {
   }
 
   async submitOrder() {
-    debugger;
     this.loading = true;
     const basket = this.basketService.getCurrentBasketValue();
     try {
-      const createdOrder = await this.createOrder(basket); // api
+      const createdOrder = await this.createOrder(basket);
       const paymentResult = await this.confirmPaymentWithStripe(basket);
+
       if (paymentResult.paymentIntent) {
-        // if (true) {
         this.basketService.deleteLocalBasket(basket.id);
         const navigationExtras: NavigationExtras = { state: createdOrder };
         this.router.navigate(['checkout/success'], navigationExtras);
@@ -97,12 +96,42 @@ export class CheckoutPaymentComponent implements AfterViewInit, OnDestroy {
     }
   }
 
-  private async confirmPaymentWithStripe(basket) {
-    debugger
-    console.log(this.cardNumber)
-    console.log(this.checkoutForm.get('paymentForm').get('nameOnCard').value)
+  async createBilling() {
+    this.loading = true;
+    const basket = this.basketService.getCurrentBasketValue();
+    try {
+      // First create the order
+      const createdOrder = await this.createOrder(basket) as IOrder;
 
-    return this.stripe.confirmCardPayment(basket.clientSecret, { // then stripe will call webhook endpoint
+      // Then create billing using both basket ID and order ID
+      this.checkoutService.createBillingWithOrderId(basket.id, createdOrder.id).subscribe(
+        (billingResponse: any) => {
+          // Handle successful billing creation
+          this.basketService.deleteLocalBasket(basket.id);
+          const navigationExtras: NavigationExtras = {
+            state: {
+              order: createdOrder,
+              billingReference: billingResponse.referenceNumber
+            }
+          };
+          this.router.navigate(['checkout/success'], navigationExtras);
+          this.loading = false;
+        },
+        error => {
+          console.error('Error creating billing:', error);
+          this.toastr.error('Failed to create billing reference');
+          this.loading = false;
+        }
+      );
+    } catch (error) {
+      console.log('Error in order creation:', error);
+      this.toastr.error('Failed to create order');
+      this.loading = false;
+    }
+  }
+
+  private async confirmPaymentWithStripe(basket) {
+    return this.stripe.confirmCardPayment(basket.clientSecret, {
       payment_method: {
         card: this.cardNumber,
         billing_details: {
@@ -114,7 +143,8 @@ export class CheckoutPaymentComponent implements AfterViewInit, OnDestroy {
 
   private async createOrder(basket: IBasket) {
     const orderToCreate = this.getOrderToCreate(basket);
-    return this.checkoutService.createOrder(orderToCreate).toPromise();
+    const createdOrder = await this.checkoutService.createOrder(orderToCreate).toPromise() as IOrder;
+    return createdOrder;
   }
 
 

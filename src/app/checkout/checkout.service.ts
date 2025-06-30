@@ -24,4 +24,8 @@ export class CheckoutService {
       })
     )
   }
+
+  createBillingWithOrderId(basketId: string, orderId: string) {
+    return this.http.get(this.baseUrl + 'payments/billing/' + basketId + '/' + orderId);
+  }
 }

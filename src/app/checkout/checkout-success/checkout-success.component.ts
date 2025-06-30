@@ -9,14 +9,21 @@ import { IOrder } from 'src/app/shared/models/order';
 })
 export class CheckoutSuccessComponent implements OnInit {
   order: IOrder;
+  billingReference: string;
 
   constructor(private router: Router) {
     const navigation = this.router.getCurrentNavigation();
     const state = navigation && navigation.extras && navigation.extras.state;
     if (state) {
-      this.order = state as IOrder;
+      if (state.order) {
+        this.order = state.order;
+      } else {
+        this.order = state as IOrder;
+      }
+
+      this.billingReference = state.billingReference;
     }
-   }
+  }
 
   ngOnInit(): void {
   }

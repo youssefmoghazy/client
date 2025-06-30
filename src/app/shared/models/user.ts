@@ -3,4 +3,5 @@ export interface IUser {
     displayName: string;
     userName :string,
     token: string;
+    PhoneNumber : string;
 }
