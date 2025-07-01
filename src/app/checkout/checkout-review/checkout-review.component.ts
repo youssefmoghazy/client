@@ -157,6 +157,22 @@ export class CheckoutReviewComponent implements OnInit {
           };
 
           console.log('Navigating to success page with extras:', navigationExtras);
+
+          // First delete the basket locally
+          this.basketService.deleteLocalBasket(basketId);
+          console.log('Local basket deleted');
+
+          // Then delete the basket on the server
+          this.http.delete(`${this.baseUrl}baskets?id=${basketId}`).subscribe(
+            () => {
+              console.log('Server basket deleted successfully');
+            },
+            error => {
+              console.error('Error deleting basket on server:', error);
+            }
+          );
+
+          // Navigate to success page immediately after local basket deletion
           this.router.navigate(['checkout/success'], navigationExtras);
           this.toastr.success('Payment successful!');
         } else {
