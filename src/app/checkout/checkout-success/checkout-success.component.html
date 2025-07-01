@@ -3,11 +3,6 @@
     <h2>Thank you. Your order is confirmed</h2>
     <p class="mb-4">Your order has not shipped yet, but this is to be expected as we are not a real store</p>
 
-    <div *ngIf="billingReference" class="alert alert-info mb-4">
-        <h4>Billing Reference: {{billingReference}}</h4>
-        <p>Please use this reference number for your payment.</p>
-    </div>
-
     <button *ngIf="order" routerLink="/orders/{{order?.id}}" class="btn btn-outline-success">View your order</button>
     <button *ngIf="!order" routerLink="/orders" class="btn btn-outline-success">View your orders</button>
 </div>

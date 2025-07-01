@@ -9,7 +9,7 @@
     <div class="d-flex align-items-center">
         <a routerLink='/basket' class="position-relative">
             <i class="fa fa-shopping-cart fa-2x mr-5 text-orange"></i>
-            <div *ngIf="(basket$ | async) as basket" class="cart-no">{{basket.items.length}}</div>
+            <div *ngIf="(basket$ | async)?.items?.length > 0" class="cart-no">{{(basket$ | async)?.items?.length || 0}}</div>
         </a>
 
         <ng-container *ngIf="(currentUser$ | async) === null">

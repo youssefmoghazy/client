@@ -29,7 +29,7 @@ export class BasketService {
         })
       )
   }
-  
+
   setShippingPrice(deliveryMethod: IDeliveryMethod) {
     this.shipping = deliveryMethod.cost;
     const basket = this.getCurrentBasketValue();
@@ -38,7 +38,7 @@ export class BasketService {
     this.calculateTotals();
     this.setBasket(basket);
   }
-  
+
   getBasket(id: string) {
     return this.http.get(this.baseUrl + 'baskets?id=' + id)
       .pipe(
@@ -95,7 +95,7 @@ export class BasketService {
       if (basket.items.length > 0) {
         this.setBasket(basket);
       } else {
-        this.deleteBasket(basket); 
+        this.deleteBasket(basket);
       }
     }
   }
@@ -104,6 +104,7 @@ export class BasketService {
     this.basketSource.next(null);
     this.basketTotalSource.next(null);
     localStorage.removeItem('basket_id');
+    // No error messages or console logs here
   }
 
   deleteBasket(basket: IBasket) {
